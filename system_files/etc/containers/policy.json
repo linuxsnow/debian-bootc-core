@@ -1,0 +1,92 @@
+{
+    "default": [
+        {
+            "type": "reject"
+        }
+    ],
+    "transports": {
+        "docker": {
+            "quay.io/toolbx-images": [
+                {
+                    "type": "sigstoreSigned",
+                    "keyPath": "/etc/pki/containers/quay.io-toolbx-images.pub",
+                    "signedIdentity": {
+                        "type": "matchRepository"
+                    }
+                }
+            ],
+            "ghcr.io/linuxsnow": [
+                {
+                    "type": "sigstoreSigned",
+                    "keyPaths": [
+                        "/etc/pki/containers/snow-linux.pub",
+                    ],
+                    "signedIdentity": {
+                        "type": "matchRepository"
+                    }
+                }
+            ],
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "docker-daemon": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "atomic": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "containers-storage": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "dir": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "oci": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "oci-archive": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "docker-archive": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        },
+        "tarball": {
+            "": [
+                {
+                    "type": "insecureAcceptAnything"
+                }
+            ]
+        }
+    }
+}
