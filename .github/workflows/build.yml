@@ -155,6 +155,6 @@ jobs:
       - name: Kickoff debian-bootc-gnome
         uses: peter-evans/repository-dispatch@v4
         with:
-          token: ${{ secrets.GNOME_PAT }}
+          token: ${{ secrets.PAT }}
           repository: linuxsnow/debian-bootc-gnome
           event-type: build
