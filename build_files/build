@@ -21,6 +21,11 @@ apt install -y \
   systemd-boot-* \
   xfsprogs
 
+# Oxidize
+apt install -y \
+  sudo-rs \
+  rust-coreutils
+
 # Build Initramfs
 KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")"
 dracut --force --no-hostonly --reproducible --zstd --verbose \
