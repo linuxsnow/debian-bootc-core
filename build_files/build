@@ -4,6 +4,7 @@ set -ouex pipefail
 
 # Remove unneeded repositories and update
 rm -f /etc/apt/apt.conf.d/docker-gzip-indexes /etc/apt/apt.conf.d/docker-no-languages
+rm -f /var/log/apt/eipp.log.xz
 apt update -y
 
 # Required packages
