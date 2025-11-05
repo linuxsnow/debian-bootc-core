@@ -1,10 +1,16 @@
-image_name := env("BUILD_IMAGE_NAME", "snow-base")
+image_name := env("BUILD_IMAGE_NAME", "debian-bootc-core")
 image_tag := env("BUILD_IMAGE_TAG", "latest")
 base_dir := env("BUILD_BASE_DIR", "/tmp")
 filesystem := env("BUILD_FILESYSTEM", "ext4")
 
+default:
+    just --list --unsorted
+
 build-containerfile $image_name=image_name:
-    sudo podman build --no-cache -t "${image_name}:latest" .
+    sudo podman build --no-cache -t "{{ image_name }}:latest" .
+
+run-container $image_name=image_name:
+    sudo podman run --rm -it "{{ image_name }}:latest" bash
 
 bootc *ARGS:
     sudo podman run \
@@ -14,20 +20,21 @@ bootc *ARGS:
         -v /var/lib/containers:/var/lib/containers:Z \
         -v /dev:/dev \
         -e RUST_LOG=debug \
-        -v "{{base_dir}}:/data" \
+        -v "{{ base_dir }}:/data" \
         --security-opt label=type:unconfined_t \
-        "{{image_name}}:{{image_tag}}" bootc {{ARGS}}
+        "{{ image_name }}:{{ image_tag }}" bootc {{ ARGS }}
 
 generate-bootable-image $base_dir=base_dir $filesystem=filesystem:
     #!/usr/bin/env bash
-    if [ ! -e "${base_dir}/snowbase.img" ] ; then
-        fallocate -l 20G "${base_dir}/snowbase.img"
+    image_filename={{ image_name }}.img
+    if [ ! -e "{{ base_dir }}/${image_filename}" ] ; then
+        fallocate -l 20G "{{ base_dir }}/${image_filename}"
     fi
-    just bootc install to-disk --composefs-backend --via-loopback /data/snowbase.img --filesystem "${filesystem}" --wipe --bootloader systemd
+    just bootc install to-disk --composefs-backend --via-loopback /data/${image_filename} --filesystem "{{ filesystem }}" --wipe --bootloader systemd
 
 launch-incus:
     #!/usr/bin/env bash
-    image_file=/tmp/snowbase.img
+    image_file={{ base_dir }}/{{ image_name }}.img
 
     if [ ! -f "$image_file" ]; then
         echo "No image file found, generate-bootable-image first"
@@ -36,8 +43,7 @@ launch-incus:
 
     abs_image_file=$(realpath "$image_file")
 
-    # make the instance_name "snow" plus the variant
-    instance_name="snow-base"
+    instance_name="{{ image_name }}"
     echo "Creating instance $instance_name from image file $abs_image_file"
     incus init "$instance_name" --empty --vm
 
@@ -48,13 +54,12 @@ launch-incus:
     incus start "$instance_name"
 
 
-    echo "snow-base is Starting..."
+    echo "$instance_name is Starting..."
 
     incus console --type=vga "$instance_name"
 
 rm-incus:
     #!/usr/bin/env bash
-    instance_name="snow-base"
+    instance_name="{{ image_name }}"
     echo "Stopping and removing instance $instance_name"
     incus rm --force "$instance_name" || true
-
