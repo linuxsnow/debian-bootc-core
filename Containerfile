@@ -19,7 +19,6 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         /home \
         /root \
         /srv && \
-    mkdir -p /var && \
     mkdir -p /var/home && \
     mkdir -p /var/roothome && \
     mkdir -p /var/srv && \
