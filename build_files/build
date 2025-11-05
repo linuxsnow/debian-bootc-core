@@ -9,8 +9,8 @@ apt update -y
 
 # Required packages
 apt install -y \
-  ca-certificates \
   btrfs-progs \
+  ca-certificates \
   curl \
   dracut \
   dosfstools \
