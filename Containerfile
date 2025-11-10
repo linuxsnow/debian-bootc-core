@@ -19,15 +19,11 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
         /home \
         /root \
         /srv && \
-    mkdir -p /var/home && \
-    mkdir -p /var/roothome && \
-    mkdir -p /var/srv && \
-    mkdir -p /usr/lib/ostree && \
     mkdir /sysroot && \
     mkdir /boot && \
-    ln -s /var/home /home && \
-    ln -s /var/roothome /root && \
-    ln -s /var/srv /srv && \
+    mkdir /root && \
+    mkdir /home && \
+    mkdir /srv && \
     ln -s sysroot/ostree ostree
 
 # Lint

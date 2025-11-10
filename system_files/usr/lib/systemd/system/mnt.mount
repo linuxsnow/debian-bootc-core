@@ -1,0 +1,11 @@
+[Unit]
+DefaultDependencies=no
+Before=local-fs.target sysinit.target
+
+[Mount]
+What=/var/mnt
+Where=/mnt
+Options=bind
+
+[Install]
+WantedBy=local-fs.target
