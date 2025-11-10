@@ -37,3 +37,7 @@ sed -i 's|.*HOME=/home|HOME=/var/home|' "/etc/default/useradd"
 
 # Enable boot.mount explicitly
 systemctl enable boot.mount
+systemctl enable home.mount
+systemctl enable root.mount
+systemctl enable srv.mount
+systemctl enable mnt.mount
